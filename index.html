@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReFlower | The Circle of Life</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #D97706; /* Marigold Orange */
+            --secondary: #065F46; /* Deep Temple Green */
+            --accent: #FDE68A; /* Soft Pollen */
+            --bg: #FFFBEB; /* Cream Paper */
+            --text: #1F2937;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* --- NEW HERO SECTION MATCHING YOUR REFERENCE --- */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            /* 1. The Linear Gradient creates the dark overlay so text is readable.
+               2. url('hero-bg.png') looks for the file in your folder. 
+            */
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('hero-bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .hero-content h1 { 
+            font-size: 6rem; /* Very Large Size like reference */
+            margin-bottom: 10px; 
+            font-weight: 700;
+            letter-spacing: -2px;
+            animation: fadeInUp 1s ease;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero-content p { 
+            font-size: 1.6rem; 
+            font-weight: 300; 
+            margin: 0 auto 40px auto; 
+            animation: fadeInUp 1.5s ease;
+            opacity: 0.9;
+        }
+
+        .btn {
+            padding: 18px 45px;
+            background: var(--primary); /* The Orange Color */
+            color: white;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+            animation: fadeInUp 1.8s ease;
+        }
+
+        .btn:hover { 
+            transform: translateY(-3px); 
+            background: #b45309;
+        }
+
+        /* --- REST OF THE SECTIONS (UNCHANGED) --- */
+
+        /* Metrics Section */
+        .metrics {
+            padding: 80px 20px;
+            background: var(--secondary);
+            color: white;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        .metric-card h3 { font-size: 4rem; color: var(--accent); margin-bottom: 5px; }
+        .metric-card p { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Process Section */
+        .process { padding: 100px 10%; }
+        .section-title { text-align: center; font-size: 3rem; margin-bottom: 60px; color: var(--secondary); }
+        
+        .timeline { position: relative; max-width: 900px; margin: 0 auto; }
+        .timeline::after {
+            content: ''; position: absolute; width: 4px; background-color: var(--primary); top: 0; bottom: 0; left: 50%; margin-left: -2px;
+        }
+        .container { padding: 10px 40px; position: relative; background-color: inherit; width: 50%; }
+        .container::after {
+            content: ''; position: absolute; width: 20px; height: 20px; right: -12px; background-color: white; border: 4px solid var(--primary); top: 15px; border-radius: 50%; z-index: 1;
+        }
+        .left { left: 0; }
+        .right { left: 50%; }
+        .left::before { content: " "; height: 0; position: absolute; top: 22px; width: 0; z-index: 1; right: 30px; border: medium solid white; border-width: 10px 0 10px 10px; border-color: transparent transparent transparent white; }
+        .right::before { content: " "; height: 0; position: absolute; top: 22px; width: 0; z-index: 1; left: 30px; border: medium solid white; border-width: 10px 10px 10px 0; border-color: transparent white transparent transparent; }
+        .right::after { left: -10px; }
+        .content { padding: 20px 30px; background-color: white; position: relative; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+
+        /* Products Section */
+        .innovation { padding: 80px 5%; background: #f3f4f6; }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .card:hover { transform: translateY(-10px); }
+        /* Using background-image for cards to handle various image sizes gracefully */
+        .card-img { 
+            height: 220px; 
+            background-color: #ddd; 
+            background-size: cover; 
+            background-position: center; 
+        }
+        .card-content { padding: 25px; display: flex; flex-direction: column; flex-grow: 1;}
+        .card-content h3 { color: var(--secondary); margin: 10px 0; font-size: 1.5rem; }
+        .card-content p { color: #555; flex-grow: 1; }
+        .tag { align-self: flex-start; background: var(--accent); color: var(--secondary); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+
+        /* Interactive Calculator */
+        .calculator { padding: 100px 20px; text-align: center; background: var(--secondary); color: white; }
+        .slider-container { margin: 40px auto; max-width: 600px; }
+        input[type=range] { width: 100%; margin: 20px 0; accent-color: var(--primary); cursor: pointer; }
+        .results { display: flex; justify-content: center; gap: 40px; margin-top: 30px; flex-wrap: wrap; }
+        .res-box { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; min-width: 150px; }
+        .res-box h4 { font-size: 2.5rem; color: var(--accent); margin-bottom: 5px; }
+
+        /* Footer */
+        footer { padding: 40px; text-align: center; background: #111; color: #888; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Responsive */
+        @media screen and (max-width: 600px) {
+            .timeline::after { left: 31px; }
+            .container { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .container::before { left: 60px; border: medium solid white; border-width: 10px 10px 10px 0; border-color: transparent white transparent transparent; }
+            .left::after, .right::after { left: 21px; }
+            .right { left: 0%; }
+            .left .content::before { left: -10px; right: auto; border-width: 10px 10px 10px 0; border-color: transparent white transparent transparent; }
+            
+            .hero-content h1 { font-size: 3.5rem; }
+            .hero-content p { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>ReFlower</h1>
+            <p>Turning Temple Waste into Universe-Level Innovation.</p>
+            <a href="#process" class="btn">Explore the Cycle</a>
+        </div>
+    </header>
+
+    <section class="metrics" id="stats">
+        <div class="metric-card">
+            <h3 class="counter" data-target="8000">0</h3>
+            <p>Kg Waste Collected</p>
+        </div>
+        <div class="metric-card">
+            <h3 class="counter" data-target="150">0</h3>
+            <p>Lives Transformed</p>
+        </div>
+        <div class="metric-card">
+            <h3 class="counter" data-target="3200">0</h3>
+            <p>Kg CO2 Offset</p>
+        </div>
+        <div class="metric-card">
+            <h3 class="counter" data-target="100">0</h3>
+            <p>% Chemical Free</p>
+        </div>
+    </section>
+
+    <section class="process" id="process">
+        <h2 class="section-title">The Journey</h2>
+        <div class="timeline">
+            <div class="container left">
+                <div class="content">
+                    <h3>1. Collection</h3>
+                    <p>Discarded flowers collected from temples. Sorted to remove plastics.</p>
+                </div>
+            </div>
+            <div class="container right">
+                <div class="content">
+                    <h3>2. Cleaning</h3>
+                    <p>Petals are cleaned and sun-dried naturally to preserve oils.</p>
+                </div>
+            </div>
+            <div class="container left">
+                <div class="content">
+                    <h3>3. Pulverization</h3>
+                    <p>Dried petals are ground into a fine, aromatic uniform powder.</p>
+                </div>
+            </div>
+            <div class="container right">
+                <div class="content">
+                    <h3>4. Creation</h3>
+                    <p>Hand-rolled by artisans into incense or processed into leather.</p>
+                </div>
+            </div>
+            <div class="container left">
+                <div class="content">
+                    <h3>5. Final Product</h3>
+                    <p>Cured, packaged, and ready to return fragrance to your home.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="innovation">
+        <h2 class="section-title">Circular Innovations</h2>
+        <div class="grid-container">
+            
+            <div class="card">
+                <div class="card-img" style="background-image: url('images/leather.png');"></div>
+                <div class="card-content">
+                    <span class="tag">Flagship</span>
+                    <h3>Fleather</h3>
+                    <p>Fungal strains transform flower fibers into a durable, animal-free leather alternative.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img" style="background-image: url('images/seed-paper.png');"></div>
+                <div class="card-content">
+                    <span class="tag">Zero Waste</span>
+                    <h3>Seed Paper</h3>
+                    <p>Stationery that grows into a plant when discarded. Embedded with Tulsi seeds.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img" style="background-image: url('images/natural-dyes.png');"></div>
+                <div class="card-content">
+                    <span class="tag">Fashion</span>
+                    <h3>Natural Dyes</h3>
+                    <p>Non-toxic pigments extracted from Hibiscus and Marigold for the fashion industry.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img" style="background-image: url('images/bio-char.png');"></div>
+                <div class="card-content">
+                    <span class="tag">Energy</span>
+                    <h3>Bio-Char</h3>
+                    <p>Woody stems carbonized into high-efficiency, low-smoke fuel for local vendors.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="calculator">
+        <h2 class="section-title" style="color: white;">Impact Calculator</h2>
+        <p>Drag the slider to see what we can create with temple waste.</p>
+        
+        <div class="slider-container">
+            <input type="range" min="1" max="1000" value="100" class="slider" id="wasteRange">
+            <p>Recycle <span id="inputVal" style="font-weight: bold; font-size: 1.5rem; color: var(--accent);">100</span> kg of flowers:</p>
+        </div>
+
+        <div class="results">
+            <div class="res-box">
+                <h4 id="sticksRes">5000</h4>
+                <p>Incense Sticks</p>
+            </div>
+            <div class="res-box">
+                <h4 id="jobsRes">2</h4>
+                <p>Days Work</p>
+            </div>
+            <div class="res-box">
+                <h4 id="leatherRes">10</h4>
+                <p>Sq. ft Fleather</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>ReFlower Project | Class Assignment Presentation</p>
+        <p>Made with &hearts; for a greener planet.</p>
+    </footer>
+
+    <script>
+        // 1. Counter Animation
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const inc = target / speed;
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 20);
+                    } else { counter.innerText = target; }
+                };
+                updateCount();
+            });
+        };
+
+        let counted = false;
+        window.addEventListener('scroll', () => {
+            const section = document.querySelector('.metrics');
+            if(section.getBoundingClientRect().top < window.innerHeight / 1.3 && !counted) {
+                animateCounters();
+                counted = true;
+            }
+        });
+
+        // 2. Calculator Logic
+        const slider = document.getElementById("wasteRange");
+        const output = document.getElementById("inputVal");
+        const sticks = document.getElementById("sticksRes");
+        const jobs = document.getElementById("jobsRes");
+        const leather = document.getElementById("leatherRes");
+
+        slider.oninput = function() {
+            let val = this.value;
+            output.innerHTML = val;
+            sticks.innerHTML = (val * 50).toLocaleString();
+            jobs.innerHTML = (val / 50).toFixed(1);
+            leather.innerHTML = (val / 10).toFixed(0);
+        }
+    </script>
+</body>
+</html>
